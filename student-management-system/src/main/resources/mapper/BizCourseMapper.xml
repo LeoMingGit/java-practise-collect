@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cooper.studentmanagementsystem.mapper.BizCourseMapper">
+
+    <resultMap id="BaseResultMap" type="com.cooper.studentmanagementsystem.entity.BizCourse">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="courseno" column="courseno" jdbcType="VARCHAR"/>
+            <result property="coursename" column="coursename" jdbcType="VARCHAR"/>
+            <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,courseno,coursename,
+        createtime
+    </sql>
+
+    <select id="findAllCourse" resultType="com.cooper.studentmanagementsystem.entity.BizCourse">
+        select * from  biz_course
+    </select>
+    <!--批量更新字段-->
+    <delete id="batchUpdateCreateTime" parameterType="java.util.List">
+        update  biz_course  set createtime=now()
+        where id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>
