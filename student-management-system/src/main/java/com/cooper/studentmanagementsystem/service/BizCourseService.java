@@ -1,7 +1,10 @@
 package com.cooper.studentmanagementsystem.service;
 
+import com.cooper.studentmanagementsystem.dto.saveCourseParam;
+import com.cooper.studentmanagementsystem.dto.updateCourseParam;
 import com.cooper.studentmanagementsystem.entity.BizCourse;
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -15,4 +18,9 @@ public interface BizCourseService extends IService<BizCourse> {
     List<BizCourse> findAllCourse();
     int  batchUpdateCreateTime(List<String> list);
 
+    int SaveCourse(saveCourseParam param);
+
+    boolean UpdateCourse(updateCourseParam param);
+
+    boolean  deleteCourseByID(Integer id);
 }

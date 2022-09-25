@@ -1,11 +1,15 @@
 package com.cooper.studentmanagementsystem.controller;
 
 
+import ch.qos.logback.classic.db.names.TableName;
+import com.cooper.studentmanagementsystem.dto.saveCourseParam;
+import com.cooper.studentmanagementsystem.dto.updateCourseParam;
 import com.cooper.studentmanagementsystem.entity.BizCourse;
 import com.cooper.studentmanagementsystem.service.BizCourseService;
 import com.cooper.studentmanagementsystem.tools.JSONResult;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +48,38 @@ public class CourseController {
         }
         return JSONResult.errorMsg("failure");
     }
+    @ApiOperation("SaveCourse")
+    @RequestMapping(value = "/SaveCourse",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONResult SaveCourse(@Validated  @RequestBody saveCourseParam param) {
 
+        int effectrow= bizCourseService.SaveCourse(param);
+        if(effectrow>0){
+            return JSONResult.ok("success");
+        }
+        return JSONResult.errorMsg("failure");
+    }
+    @ApiOperation("UpdateCourse")
+    @RequestMapping(value = "/UpdateCourse",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONResult UpdateCourse(@Validated  @RequestBody updateCourseParam param) {
 
+        boolean isok= bizCourseService.UpdateCourse(param);
+        if(isok){
+            return JSONResult.ok("success");
+        }
+        return JSONResult.errorMsg("failure");
+    }
+    @ApiOperation("deleteCourseByID")
+    @RequestMapping(value = "/deleteCourseByID",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONResult deleteCourseByID(@RequestParam("id") Integer id) {
+
+        boolean isok= bizCourseService.deleteCourseByID(id);
+        if(isok){
+            return JSONResult.ok("success");
+        }
+        return JSONResult.errorMsg("failure");
+    }
 
 }
