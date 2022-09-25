@@ -1,4 +1,4 @@
-package com.cooper.studentmanagementsystem.controller;
+package com.cooper.studentmanagementsystem.dto.controller;
 
 
 import ch.qos.logback.classic.db.names.TableName;
