@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.order.springboottesttransaction.mapper.ProductInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.order.springboottesttransaction.entity.ProductInfo">
+            <id property="productId" column="product_id" jdbcType="INTEGER"/>
+            <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+            <result property="productPrice" column="product_price" jdbcType="DECIMAL"/>
+            <result property="productDescription" column="product_description" jdbcType="VARCHAR"/>
+            <result property="productStatus" column="product_status" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        product_id,product_name,product_price,
+        product_description,product_status,create_time,
+        create_user,update_time,update_user
+    </sql>
+</mapper>
