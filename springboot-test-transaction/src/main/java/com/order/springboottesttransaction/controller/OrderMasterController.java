@@ -6,6 +6,7 @@ import com.order.springboottesttransaction.service.OrderMasterService;
 import com.order.springboottesttransaction.vo.OrderAddVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,7 @@ public class OrderMasterController {
     OrderMasterService orderMasterService;
 
     @PostMapping("/create")
-    public int create(OrderAddVo orderAddVo) {
+    public int create(@RequestBody  OrderAddVo orderAddVo) {
         OrderAddDto orderAddDto = ConvertOrderAddVo2OrderAddDto.convert(orderAddVo);
         return orderMasterService.createOrder(orderAddDto);
     }

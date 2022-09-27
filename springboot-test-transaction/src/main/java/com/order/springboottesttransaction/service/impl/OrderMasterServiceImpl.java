@@ -66,7 +66,15 @@ public class OrderMasterServiceImpl extends ServiceImpl<OrderMasterMapper, Order
         OrderMaster orderMaster = BeanConvertUtils.convertTo(orderAddDto, OrderMaster::new);
         orderMaster.setOrderAmount(amount);
         orderMaster.setStatus(OrderStatusEnums.NO_PAY.getCode());
+        orderMaster.setCreateUser("admin");
+        orderMaster.setUpdateUser("admin");
         save(orderMaster);
+       //<edit-folder>
+        Integer a=0;
+        Integer b=0;
+        Integer c=0;
+        c=a/b;
+       //</edit-folder>
 
         // 设置detail的order主键
         orderDetails.stream().forEach(p -> p.setOrderId(orderMaster.getOrderId()));
