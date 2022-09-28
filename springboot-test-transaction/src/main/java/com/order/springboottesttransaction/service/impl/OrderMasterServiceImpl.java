@@ -17,12 +17,14 @@ import com.order.springboottesttransaction.utils.BeanConvertUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * https://blog.51cto.com/u_15359644/3803989
 * @author Administrator
 * @description 针对表【order_master】的数据库操作Service实现
 * @createDate 2022-09-25 18:06:32
@@ -42,45 +44,61 @@ public class OrderMasterServiceImpl extends ServiceImpl<OrderMasterMapper, Order
 
     @Override
     public Integer createOrder(OrderAddDto orderAddDto) {
-        // 订单总金额
-        BigDecimal amount = BigDecimal.ZERO;
-        // 订单详情PO
-        List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
 
-        // 从ids中查找所有商品信息
-        for (OrderDetail orderDetail : orderAddDto.getOrderDetails()) {
-            ProductInfo productInfo = productInfoMapper.selectById(orderDetail.getProductId());
-            if (null == productInfo || ProductStatusEnums.DOWN.getCode() == productInfo.getProductStatus()) {
-                throw new APIException(AppCode.PRODUCT_NOT_EXIST, "上架商品中无法查询到：" + orderDetail.getProductId());
+        Integer  orderid=0;
+        try {
+            // 订单总金额
+            BigDecimal amount = BigDecimal.ZERO;
+            // 订单详情PO
+            List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
+
+            // 从ids中查找所有商品信息
+            for (OrderDetail orderDetail : orderAddDto.getOrderDetails()) {
+                ProductInfo productInfo = productInfoMapper.selectById(orderDetail.getProductId());
+                if (null == productInfo || ProductStatusEnums.DOWN.getCode() == productInfo.getProductStatus()) {
+                    throw new APIException(AppCode.PRODUCT_NOT_EXIST, "上架商品中无法查询到：" + orderDetail.getProductId());
+                }
+                // 计算订单总金额
+                amount = amount.add(productInfo.getProductPrice()
+                        .multiply(new BigDecimal(orderDetail.getProductNumber())));
+
+                // 设置订单详情Po
+                BeanUtils.copyProperties(productInfo, orderDetail);
+                orderDetails.add(orderDetail);
             }
-            // 计算订单总金额
-            amount = amount.add(productInfo.getProductPrice()
-                    .multiply(new BigDecimal(orderDetail.getProductNumber())));
 
-            // 设置订单详情Po
-            BeanUtils.copyProperties(productInfo, orderDetail);
-            orderDetails.add(orderDetail);
+            // 设置主订单，状态是未支付
+            OrderMaster orderMaster = BeanConvertUtils.convertTo(orderAddDto, OrderMaster::new);
+            orderMaster.setOrderAmount(amount);
+            orderMaster.setStatus(OrderStatusEnums.NO_PAY.getCode());
+            orderMaster.setCreateUser("admin");
+            orderMaster.setUpdateUser("admin");
+            save(orderMaster);
+            //<edit-folder>
+            Integer a=0;
+            Integer b=0;
+            Integer c=0;
+            c=a/b;
+            //</edit-folder>
+
+            // 设置detail的order主键
+            orderDetails.stream().forEach(p -> p.setOrderId(orderMaster.getOrderId()));
+            orderDetailService.saveBatch(orderDetails);
+            orderid= orderMaster.getOrderId();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //设置手动回滚
+            TransactionAspectSupport.currentTransactionStatus()
+                    .setRollbackOnly();
+
+        }
+        finally {
+
+            return orderid;
         }
 
-        // 设置主订单，状态是未支付
-        OrderMaster orderMaster = BeanConvertUtils.convertTo(orderAddDto, OrderMaster::new);
-        orderMaster.setOrderAmount(amount);
-        orderMaster.setStatus(OrderStatusEnums.NO_PAY.getCode());
-        orderMaster.setCreateUser("admin");
-        orderMaster.setUpdateUser("admin");
-        save(orderMaster);
-       //<edit-folder>
-        Integer a=0;
-        Integer b=0;
-        Integer c=0;
-        c=a/b;
-       //</edit-folder>
 
-        // 设置detail的order主键
-        orderDetails.stream().forEach(p -> p.setOrderId(orderMaster.getOrderId()));
-        orderDetailService.saveBatch(orderDetails);
-
-        return orderMaster.getOrderId();
     }
 }
 
