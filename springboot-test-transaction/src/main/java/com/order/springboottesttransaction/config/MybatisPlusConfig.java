@@ -17,18 +17,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration//配置类
 public class MybatisPlusConfig {
 
-    //配置乐观锁插件
+    // 1.乐观锁
     @Bean
-    public OptimisticLockerInterceptor optimisticLockerInterceptor() {
+    public OptimisticLockerInterceptor optimisticLockerInterceptor(){
         return new OptimisticLockerInterceptor();
     }
-
-    //配置分页插件
+    // 分页插件
     @Bean
     public PaginationInterceptor paginationInterceptor() {
-        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
-        paginationInterceptor.setOverflow(false);
-        return paginationInterceptor;
+        return new PaginationInterceptor();
     }
 
 }

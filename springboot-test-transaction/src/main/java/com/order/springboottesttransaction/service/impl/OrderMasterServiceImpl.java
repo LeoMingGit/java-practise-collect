@@ -17,6 +17,7 @@ import com.order.springboottesttransaction.utils.BeanConvertUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.math.BigDecimal;
@@ -24,11 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * https://blog.51cto.com/u_15359644/3803989
+ * https://blog.csdn.net/u013919153/article/details/116045229
 * @author Administrator
 * @description 针对表【order_master】的数据库操作Service实现
 * @createDate 2022-09-25 18:06:32
 */
+@Transactional(rollbackFor = {RuntimeException.class, Exception.class})
 @Service
 public class OrderMasterServiceImpl extends ServiceImpl<OrderMasterMapper, OrderMaster>
     implements OrderMasterService{
@@ -74,12 +76,10 @@ public class OrderMasterServiceImpl extends ServiceImpl<OrderMasterMapper, Order
             orderMaster.setCreateUser("admin");
             orderMaster.setUpdateUser("admin");
             save(orderMaster);
-            //<edit-folder>
             Integer a=0;
             Integer b=0;
             Integer c=0;
-            c=a/b;
-            //</edit-folder>
+            c=a/b;//制造一个异常，测试mybatisplus 的回滚
 
             // 设置detail的order主键
             orderDetails.stream().forEach(p -> p.setOrderId(orderMaster.getOrderId()));
@@ -89,6 +89,7 @@ public class OrderMasterServiceImpl extends ServiceImpl<OrderMasterMapper, Order
         } catch (Exception e) {
             e.printStackTrace();
             //设置手动回滚
+            //这里注释掉了，则不会回滚数据了
             TransactionAspectSupport.currentTransactionStatus()
                     .setRollbackOnly();
 
