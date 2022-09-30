@@ -26,6 +26,7 @@ public class SwaggerConfig{
                 .apis(RequestHandlerSelectors.basePackage("com.fs.springbootds.controller"))
                 .paths(PathSelectors.any())
                 .build();
+        ///
     }
 
     private ApiInfo apiInfo() {
