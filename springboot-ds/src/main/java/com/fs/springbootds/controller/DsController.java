@@ -1,4 +1,5 @@
 package com.fs.springbootds.controller;
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -66,6 +67,14 @@ public class DsController {
         List<Map<String,Object>> lst=new ArrayList<>();
         lst.add(m1);
         lst.add(m2);
+        System.out.println("id\t\ttitle\t\tcreateTime\tlength");
+        for(int i=0;i<lst.size();i++) {
+            Map<String,Object> temp = lst.get(i);
+            System.out.println(temp.get("id")+"\t"
+                    +temp.get("title")+"\t\t"
+                    +temp.get("createTime")+"\t"
+                    +temp.get("length"));
+        }
 
 
 
