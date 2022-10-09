@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -19,7 +18,11 @@ public class DsController {
         return "hello world!!!";
     }
 
-    @ApiOperation("StreamApi")
+    /**
+     * java stream api 示例代码
+     * @return
+     */
+    @ApiOperation("java stream api 示例代码")
     @RequestMapping(value = "/StreamApi", method = RequestMethod.GET)
     @ResponseBody
     public String StreamApi() {
@@ -39,4 +42,34 @@ public class DsController {
 
         return "StreamApi!!!";
     }
+
+    /**
+     * 容器_存取二维表格信息
+     * @return
+     */
+    @ApiOperation("容器_存取二维表格信息")
+    @RequestMapping(value = "/HashList", method = RequestMethod.GET)
+    @ResponseBody
+    public String HashList()  {
+        Map<String,Object> m1=new HashMap<>();
+        m1.put("id",10001);
+        m1.put("title","java test");
+        m1.put("createTime","2022-10-10");
+        m1.put("length",300);
+
+        Map<String,Object> m2=new HashMap<>();
+        m2.put("id",10002);
+        m2.put("title","spring test");
+        m2.put("createTime","2022-10-12");
+        m2.put("length",100);
+
+        List<Map<String,Object>> lst=new ArrayList<>();
+        lst.add(m1);
+        lst.add(m2);
+
+
+
+        return "容器_存取二维表格信息!!!";
+    }
+
 }
