@@ -1,6 +1,12 @@
 package com.fs.springbootds.controller;
-import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fs.springbootds.domain.OrderMaster;
+import com.fs.springbootds.mapper.OrderMasterMapper;
+import com.fs.springbootds.mapper.ProductInfoMapper;
+import com.fs.springbootds.service.OrderDetailService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +17,19 @@ import java.util.stream.Collectors;
 
 @RestController
 public class DsController {
+
+    @Autowired
+    OrderMasterMapper orderMasterMapper;
+
+    @Autowired
+    ProductInfoMapper productInfoMapper;
+
+    @Autowired
+    OrderDetailService orderDetailService;
+
+
+
+
     @ApiOperation("SayHello")
     @RequestMapping(value = "/SayHello", method = RequestMethod.GET)
     @ResponseBody
@@ -80,5 +99,28 @@ public class DsController {
 
         return "容器_存取二维表格信息!!!";
     }
+
+    /**
+     * LeftJoin
+     * @return
+     */
+    @ApiOperation("LeftJoin")
+    @RequestMapping(value = "/LeftJoin", method = RequestMethod.GET)
+    @ResponseBody
+    public String LeftJoin()  {
+
+        //参考link:https://blog.csdn.net/qq_52423918/article/details/119455043
+        // https://blog.csdn.net/qq_41617901/article/details/127242385?spm=1001.2014.3001.5502
+
+        IPage<OrderMaster> page = new Page<>(1,99999);
+        //这里想加分页条件的可以如方法三自己构造条件构造器
+        IPage<OrderMaster> orderMasterIPage = orderMasterMapper.selectPage(page, null);
+
+
+
+
+        return "LeftJoin";
+    }
+
 
 }
