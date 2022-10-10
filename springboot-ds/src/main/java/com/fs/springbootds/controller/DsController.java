@@ -1,7 +1,10 @@
 package com.fs.springbootds.controller;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fs.springbootds.domain.OrderDetail;
 import com.fs.springbootds.domain.OrderMaster;
+import com.fs.springbootds.mapper.OrderDetailMapper;
 import com.fs.springbootds.mapper.OrderMasterMapper;
 import com.fs.springbootds.mapper.ProductInfoMapper;
 import com.fs.springbootds.service.OrderDetailService;
@@ -25,7 +28,7 @@ public class DsController {
     ProductInfoMapper productInfoMapper;
 
     @Autowired
-    OrderDetailService orderDetailService;
+    OrderDetailMapper orderDetailMapper;
 
 
 
@@ -116,7 +119,12 @@ public class DsController {
         //这里想加分页条件的可以如方法三自己构造条件构造器
         IPage<OrderMaster> orderMasterIPage = orderMasterMapper.selectPage(page, null);
         List<OrderMaster>  ordermaster_lst= orderMasterIPage.getRecords();
-
+        System.out.println(JSON.toJSONString(ordermaster_lst));
+        IPage<OrderDetail> pageDetail = new Page<>(1,99999);
+        //这里想加分页条件的可以如方法三自己构造条件构造器
+        IPage<OrderDetail>  orderDetailIPage = orderDetailMapper.selectPage(pageDetail, null);
+        List<OrderDetail>   orderDetails_lst= orderDetailIPage.getRecords();
+        System.out.println(JSON.toJSONString(orderDetails_lst));
 
 
         return "LeftJoin";
