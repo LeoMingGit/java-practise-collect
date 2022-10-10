@@ -111,11 +111,11 @@ public class DsController {
 
         //参考link:https://blog.csdn.net/qq_52423918/article/details/119455043
         // https://blog.csdn.net/qq_41617901/article/details/127242385?spm=1001.2014.3001.5502
-
+       //https://www.didispace.com/idea-tips/debug/debug-throw-exception.html
         IPage<OrderMaster> page = new Page<>(1,99999);
         //这里想加分页条件的可以如方法三自己构造条件构造器
         IPage<OrderMaster> orderMasterIPage = orderMasterMapper.selectPage(page, null);
-
+        List<OrderMaster>  ordermaster_lst= orderMasterIPage.getRecords();
 
 
 
