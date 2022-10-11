@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * mybatisplus配置类
  */
 //扫描mapper文件夹
-@MapperScan("com.order.springboottesttransaction.mapper")
+@MapperScan("com.fs.tulingsql.mapper")
 @EnableTransactionManagement//事务
 @Configuration//配置类
 public class MybatisPlusConfig {
