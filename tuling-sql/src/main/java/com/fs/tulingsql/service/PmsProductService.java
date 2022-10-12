@@ -1,5 +1,6 @@
 package com.fs.tulingsql.service;
 
+import com.fs.tulingsql.dto.ProductDetailDTO;
 import com.fs.tulingsql.entity.PmsProduct;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,4 +11,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface PmsProductService extends IService<PmsProduct> {
 
+    /**
+     * 取商品详情获
+     * @param id 商品id
+     * @return
+     */
+    ProductDetailDTO getProductDetail(Long id);
 }

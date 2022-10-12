@@ -1,5 +1,6 @@
 package com.fs.tulingsql.mapper;
 
+import com.fs.tulingsql.dto.ProductDetailDTO;
 import com.fs.tulingsql.entity.PmsProduct;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -10,6 +11,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.fs.tulingsql.entity.PmsProduct
 */
 public interface PmsProductMapper extends BaseMapper<PmsProduct> {
+
+    ProductDetailDTO getProductDetail(Long id);
 
 }
 
