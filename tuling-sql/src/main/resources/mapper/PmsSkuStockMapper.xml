@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fs.tulingsql.mapper.PmsSkuStockMapper">
+
+    <resultMap id="BaseResultMap" type="com.fs.tulingsql.entity.PmsSkuStock">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="productId" column="product_id" jdbcType="BIGINT"/>
+            <result property="skuCode" column="sku_code" jdbcType="VARCHAR"/>
+            <result property="price" column="price" jdbcType="DECIMAL"/>
+            <result property="stock" column="stock" jdbcType="INTEGER"/>
+            <result property="lowStock" column="low_stock" jdbcType="INTEGER"/>
+            <result property="sp1" column="sp1" jdbcType="VARCHAR"/>
+            <result property="sp2" column="sp2" jdbcType="VARCHAR"/>
+            <result property="sp3" column="sp3" jdbcType="VARCHAR"/>
+            <result property="pic" column="pic" jdbcType="VARCHAR"/>
+            <result property="sale" column="sale" jdbcType="INTEGER"/>
+            <result property="promotionPrice" column="promotion_price" jdbcType="DECIMAL"/>
+            <result property="lockStock" column="lock_stock" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,product_id,sku_code,
+        price,stock,low_stock,
+        sp1,sp2,sp3,
+        pic,sale,promotion_price,
+        lock_stock
+    </sql>
+</mapper>
