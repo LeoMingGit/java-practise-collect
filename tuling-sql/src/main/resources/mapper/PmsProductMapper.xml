@@ -50,9 +50,9 @@
     </resultMap>
     <resultMap id="ProductDetailMap" extends="BaseResultMap" type="com.fs.tulingsql.dto.ProductDetailDTO">
         <!--sku-->
-        <collection property="skuStockList" columnPrefix="sku_" resultMap="com.fs.tulingsql.mapper.PmsSkuStockMapper.BaseResultMap"></collection>
+        <collection property="skuStockList" columnPrefix="sku123_" resultMap="com.fs.tulingsql.mapper.PmsSkuStockMapper.BaseResultMap"></collection>
         <!--spk-->
-        <collection property="productAttributeValueList"  columnPrefix="att_" ofType="com.fs.tulingsql.dto.PmsProductAttributeValueDTO" >
+        <collection property="productAttributeValueList"  columnPrefix="att123_" ofType="com.fs.tulingsql.dto.PmsProductAttributeValueDTO" >
             <id column="id" property="id" />
             <result column="product_id" property="productId" />
             <result column="product_attribute_id" property="productAttributeId" />
