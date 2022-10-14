@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fs.tulingsql.mapper.BookMapper">
+
+    <resultMap id="BaseResultMap" type="com.fs.tulingsql.entity.Book">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="authorId" column="author_id" jdbcType="INTEGER"/>
+            <result property="bookName" column="book_name" jdbcType="VARCHAR"/>
+            <result property="bookType" column="book_type" jdbcType="CHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,author_id,book_name,
+        book_type
+    </sql>
+    <select id="test1" resultType ="com.fs.tulingsql.entity.Book">
+        select * from book
+        <where>
+            <if test="bookname == null">
+                and book_name is null
+            </if>
+            <if test="bookname == '' ">
+                and book_name = ''
+            </if>
+            <!-- OGNL的表达式中，'1' 会被解析成字符，java是强类型的，char 和 一个string 不是同一种类型 -->
+            <!-- <if test="bookname == '1' "> -->
+            <!-- <if test=' bookname eq "1" '> -->
+            <if test="bookname == '1'.toString() ">
+                and book_name = '1'
+            </if>
+            <if test="bookname =='西游记'">
+                and book_name = #{bookname}
+            </if>
+            <if test="bookname eq '红楼'">
+                and book_name = #{bookname}
+            </if>
+        </where>
+    </select>
+</mapper>
