@@ -37,3 +37,7 @@ CREATE TABLE `sys_upload_task` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='分片上传-分片任务记录';
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+
