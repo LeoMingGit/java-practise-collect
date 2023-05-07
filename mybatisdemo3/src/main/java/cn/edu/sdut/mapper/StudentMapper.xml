@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.sdut.mapper.StudentMapper">
+    <insert id="addStudent" parameterType="Student">
+        insert into student values (null,#{student.grade.gradeid},#{student.stuname},
+        #{student.gender},#{student.age},#{student.stunum})
+    </insert>
+
+    <resultMap id="studentMap" type="Student" autoMapping="true">
+        <id property="stuid" column="stuid"></id>
+        <association property="grade" resultMap="gradeMap"></association>
+    </resultMap>
+    <resultMap id="gradeMap" type="Grade" autoMapping="true">
+        <id column="gradeid" property="gradeid"></id>
+    </resultMap>
+    <select id="queryStudentById" parameterType="int" resultMap="studentMap">
+        SELECT g.gradename,s.* FROM grade g,student s WHERE g.gradeid=s.gradeid AND s.stuid=#{stuid}
+    </select>
+
+    <select id="queryStudents" resultMap="studentMap">
+        SELECT g.gradename,s.* FROM grade g,student s WHERE g.gradeid=s.gradeid order by stuid desc
+    </select>
+
+</mapper>

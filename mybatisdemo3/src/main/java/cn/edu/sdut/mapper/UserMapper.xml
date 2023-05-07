@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace不能再乱写，必须要写mapper接口的完全限定名-->
+<mapper namespace="cn.edu.sdut.mapper.UserMapper">
+
+    <!--id 属性值必须要写UserMapper接口中的方法名
+    resultType不需要再写完全限定名，只需要写类的名字就行-->
+    <select id="queryUserById" parameterType="int" resultType="Tbuser">
+        select * from tbuser where userid=#{userid}
+    </select>
+    <select id="queryUserCount" resultType="int">
+        select count(*) from tbuser
+    </select>
+    <select id="queryUserByusername" parameterType="String" resultType="Tbuser">
+        select * from tbuser where username=#{username}
+    </select>
+    <select id="login" parameterType="Tbuser" resultType="Tbuser">
+        select * from tbuser where username=#{username} and password=#{password}
+    </select>
+
+    <select id="queryUsers" resultType="Tbuser">
+        select * from tbuser
+        <where>
+            <if test="username!=null and username!=''">
+                and username like concat("%",#{username},"%")
+            </if>
+            <if test="userroles!=null and userroles!=''">
+                and userroles=#{userroles}
+            </if>
+        </where>
+        order by userid desc
+    </select>
+
+    <!--新增、删除不用加resultType-->
+    <insert id="addUser" parameterType="Tbuser">
+        insert into tbuser values(null,#{username},#{password},#{userroles},#{nickname},now())
+    </insert>
+    <!--针对多项任意修改-->
+    <update id="updateUser" parameterType="Tbuser">
+        update tbuser
+        <set>
+            <if test="username!=null and username!=''">
+                username=#{username},
+            </if>
+            <if test="password!=null and password!=''">
+                password=#{password},
+            </if>
+            <if test="userroles!=null and userroles!=''">
+                userroles=#{userroles},
+            </if>
+            <if test="nickname!=null and nickname!=''">
+                nickname=#{nickname},
+            </if>
+        </set>
+        where userid=#{userid}
+    </update>
+    <delete id="deleteUser" parameterType="int">
+        delete from tbuser where userid=#{userid}
+    </delete>
+
+    <!--注意foreach里面的各项配置-->
+    <delete id="deleteUsers" parameterType="int">
+        delete from tbuser where userid in 
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--不能配置paramterType属性-->
+    <select id="login1" resultType="Tbuser">
+        select * from tbuser where username=#{param1} and password=#{param2}
+    </select>
+
+    <select id="login2" resultType="Tbuser">
+        select * from tbuser where username=#{uname} and password=#{pwd}
+    </select>
+    <select id="login3" parameterType="Map" resultType="Tbuser">
+        select * from tbuser where username=#{uname} and password=#{pwd}
+    </select>
+    <!--#{}里要用@Param("内容")，如果是类的类型，需要对象名.属性名
+    -->
+    <select id="login4" parameterType="Tbuser" resultType="Tbuser">
+        select
+        <include refid="queryColumns"></include> 
+         from tbuser where username=#{user.username} and password=#{user.password}
+    </select>
+    <!--sql片段-->
+    <sql id="queryColumns">
+        userid,username,password,userroles,nickname,regtime
+    </sql>
+</mapper>

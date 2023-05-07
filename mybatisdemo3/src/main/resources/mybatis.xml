@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties>
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/sdut?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"/>
+        <property name="username" value="root"/>
+        <property name="password" value=""/>
+    </properties>
+    <typeAliases>
+        <!--繁琐不推荐
+        <typeAlias type="cn.edu.sdut.entity.Tbuser" alias="Tbuser"></typeAlias>
+        -->
+        <package name="cn.edu.sdut.entity"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="cn.edu.sdut.commons.DruidDataSourceFactory">
+                <property name="driverClass" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!--mybatis推荐我们把映射表的xml文件和Mapper接口放在一个包中
+        <package name=""/>
+        -->
+        <package name="cn.edu.sdut.mapper"/>
+    </mappers>
+</configuration>
