@@ -28,22 +28,22 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV === 'development',
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
-  // webpack-dev-server 相关配置
+  //webpack-dev-server 相关配置
   devServer: {
     host: '0.0.0.0',
-    port: port,
-    open: false,
-    proxy: {
-      // detail: https://cli.vuejs.org/config/#devserver-proxy
-      [process.env.VUE_APP_BASE_API]: {
-        target: `http://127.0.0.1:7004/prod-api`,
-        changeOrigin: false,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
-      }
-    },
-    disableHostCheck: true
+    port: 8848,
+    open: false
+    // proxy: {
+    //   // detail: https://cli.vuejs.org/config/#devserver-proxy
+    //   [process.env.VUE_APP_BASE_API]: {
+    //     target: `http://127.0.0.1:7004/prod-api`,
+    //     changeOrigin: false,
+    //     pathRewrite: {
+    //       ['^' + process.env.VUE_APP_BASE_API]: ''
+    //     }
+    //   }
+    // },
+    // disableHostCheck: true
   },
   css: {
     loaderOptions: {
