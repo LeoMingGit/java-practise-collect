@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OrderMasterMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.system.domain.OrderMaster">
+        <id column="order_id" property="orderId" />
+        <result column="buyer_name" property="buyerName" />
+        <result column="buyer_phone" property="buyerPhone" />
+        <result column="order_amount" property="orderAmount" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+    </resultMap>
+
+    <select id="selectOrderById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT * FROM `order_master`  WHERE order_id = #{orderId}
+    </select>
+
+    <insert id="insertOrder" parameterType="com.ruoyi.system.domain.OrderMaster">
+        INSERT INTO order_master (buyer_name, buyer_phone, order_amount, status, create_time, create_user, update_time, update_user)
+        VALUES (#{buyerName}, #{buyerPhone}, #{orderAmount}, #{status}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser})
+    </insert>
+
+    <update id="updateOrder" parameterType="com.ruoyi.system.domain.OrderMaster">
+        UPDATE order_master
+        SET buyer_name = #{buyerName}, buyer_phone = #{buyerPhone}, order_amount = #{orderAmount}, status = #{status},
+            create_time = #{createTime}, create_user = #{createUser}, update_time = #{updateTime}, update_user = #{updateUser}
+        WHERE order_id = #{orderId}
+    </update>
+
+    <delete id="deleteOrder" parameterType="java.lang.Integer">
+        DELETE FROM order_master WHERE order_id = #{orderId}
+    </delete>
+
+    <select id="selectOrdersByPage" resultType="com.ruoyi.system.domain.OrderMaster">
+        <bind name="startIndex" value="(pageIndex - 1) * pageSize" />
+        SELECT *
+        FROM order_master
+<!--        WHERE-->
+<!--        <if test="startTime != null">-->
+<!--            create_time >= #{startTime}-->
+<!--        </if>-->
+<!--        <if test="endTime != null">-->
+<!--            AND create_time <= #{endTime}-->
+<!--        </if>-->
+        ORDER BY order_id ASC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+</mapper>

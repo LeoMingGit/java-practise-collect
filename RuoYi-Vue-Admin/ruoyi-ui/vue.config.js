@@ -33,17 +33,7 @@ module.exports = {
     host: '0.0.0.0',
     port: 8848,
     open: false
-    // proxy: {
-    //   // detail: https://cli.vuejs.org/config/#devserver-proxy
-    //   [process.env.VUE_APP_BASE_API]: {
-    //     target: `http://127.0.0.1:7004/prod-api`,
-    //     changeOrigin: false,
-    //     pathRewrite: {
-    //       ['^' + process.env.VUE_APP_BASE_API]: ''
-    //     }
-    //   }
-    // },
-    // disableHostCheck: true
+ 
   },
   css: {
     loaderOptions: {
