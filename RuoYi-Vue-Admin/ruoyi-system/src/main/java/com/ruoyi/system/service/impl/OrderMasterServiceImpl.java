@@ -62,7 +62,8 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
      * @return
      */
     @Override
-    public AjaxResult handleOrderExcel(String excel){
+    public AjaxResult handleOrderExcel(String excelpath){
+        System.out.println(excelpath);
 
         AjaxResult result= new AjaxResult();
 

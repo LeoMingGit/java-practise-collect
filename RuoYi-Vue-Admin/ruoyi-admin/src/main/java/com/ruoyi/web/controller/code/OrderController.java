@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Api("代码练习")
 @RestController
@@ -82,15 +83,13 @@ public class OrderController {
             if (!tempFolder.exists()) {
                 tempFolder.mkdir();
             }
-
             // 保存上传的Excel文件到tempfile目录
-            String fileName = file.getOriginalFilename();
+            // 生成唯一的UUID作为文件名
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             String filePath = tempFolderPath + File.separator + fileName;
             File excelFile = new File(filePath);
             file.transferTo(excelFile);
-
-            String path="";
-            return  orderMasterService.handleOrderExcel(path);
+            return  orderMasterService.handleOrderExcel(filePath);
 
         } catch (Exception e) {
             e.printStackTrace();
