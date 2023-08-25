@@ -1,5 +1,6 @@
 package com.ruoyi.system.service;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.OrderMaster;
 import com.ruoyi.system.domain.dto.OrderQueryDTO;
 
@@ -21,5 +22,14 @@ public interface IOrderMasterService {
     List<OrderMaster> selectOrdersByPage(OrderQueryDTO queryDTO);
 
     long  countTotalOrder  (OrderQueryDTO queryDTO);
+
+    /**
+     * 处理订单excel
+     * @param excel
+     * @return
+     */
+    AjaxResult handleOrderExcel(String excel);
+
+
 
 }

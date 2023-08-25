@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.OrderMaster;
 import com.ruoyi.system.domain.dto.OrderQueryDTO;
 import com.ruoyi.system.mapper.OrderMasterMapper;
@@ -54,5 +55,26 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
     public   long  countTotalOrder  (OrderQueryDTO queryDTO){
         return orderMasterMapper.countTotalOrder(queryDTO);
     }
+
+    /**
+     * 处理订单excel
+     * @param excel
+     * @return
+     */
+    @Override
+    public AjaxResult handleOrderExcel(String excel){
+
+        AjaxResult result= new AjaxResult();
+
+
+        return result;
+
+
+    }
+
+
+
+
+
 
 }

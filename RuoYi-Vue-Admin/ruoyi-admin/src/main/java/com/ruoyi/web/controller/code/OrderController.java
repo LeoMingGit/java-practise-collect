@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.code;
 
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.system.domain.OrderMaster;
 import com.ruoyi.system.domain.dto.OrderQueryDTO;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -60,4 +63,41 @@ public class OrderController {
         return rspData;
 
     }
+
+
+    /**
+     * 处理上传的订单excel数据
+     * @param file
+     * @return
+     */
+
+    @PostMapping("/excel/upload")
+    public AjaxResult uploadExcel(@RequestParam("file") MultipartFile file) {
+        // 处理上传的Excel文件逻辑
+        try {
+
+            // 创建tempfile文件夹（如果不存在）
+            String tempFolderPath = System.getProperty("user.dir") + File.separator + "tempfile";
+            File tempFolder = new File(tempFolderPath);
+            if (!tempFolder.exists()) {
+                tempFolder.mkdir();
+            }
+
+            // 保存上传的Excel文件到tempfile目录
+            String fileName = file.getOriginalFilename();
+            String filePath = tempFolderPath + File.separator + fileName;
+            File excelFile = new File(filePath);
+            file.transferTo(excelFile);
+
+            String path="";
+            return  orderMasterService.handleOrderExcel(path);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("Excel文件上传失败: " + e.getMessage());
+        }
+    }
+
+
+
 }
