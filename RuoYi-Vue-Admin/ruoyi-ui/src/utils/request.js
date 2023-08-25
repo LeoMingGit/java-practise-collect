@@ -48,17 +48,20 @@ service.interceptors.request.use(config => {
     if (sessionObj === undefined || sessionObj === null || sessionObj === '') {
       cache.session.setJSON('sessionObj', requestObj)
     } else {
-      const s_url = sessionObj.url;                  // 请求地址
-      const s_data = sessionObj.data;                // 请求数据
-      const s_time = sessionObj.time;                // 请求时间
-      const interval = 1000;                         // 间隔时间(ms)，小于此时间视为重复提交
-      if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
-        const message = '数据正在处理，请勿重复提交';
-        console.warn(`[${s_url}]: ` + message)
-        return Promise.reject(new Error(message))
-      } else {
-        cache.session.setJSON('sessionObj', requestObj)
-      }
+    
+        const s_url = sessionObj.url;                  // 请求地址
+        const s_data = sessionObj.data;                // 请求数据
+        const s_time = sessionObj.time;                // 请求时间
+        const interval = 1000;                         // 间隔时间(ms)，小于此时间视为重复提交
+        if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
+          const message = '数据正在处理，请勿重复提交';
+         // console.warn(`[${s_url}]: ` + message)
+          return Promise.reject(message)
+        } else {
+          cache.session.setJSON('sessionObj', requestObj)
+        }
+    
+    
     }
   }
   return config
@@ -108,9 +111,9 @@ service.interceptors.response.use(res => {
     let { message } = error;
     if (message == "Network Error") {
       message = "后端接口连接异常";
-    } else if (message.includes("timeout")) {
+    } else if (message?.includes("timeout")) {
       message = "系统接口请求超时";
-    } else if (message.includes("Request failed with status code")) {
+    } else if (message?.includes("Request failed with status code")) {
       message = "系统接口" + message.substr(message.length - 3) + "异常";
     }
     Message({ message: message, type: 'error', duration: 5 * 1000 })

@@ -20,4 +20,6 @@ public interface IOrderMasterService {
 
     List<OrderMaster> selectOrdersByPage(OrderQueryDTO queryDTO);
 
+    long  countTotalOrder  (OrderQueryDTO queryDTO);
+
 }

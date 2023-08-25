@@ -1,5 +1,8 @@
 package com.ruoyi.web.controller.code;
 
+import com.github.pagehelper.PageInfo;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.system.domain.OrderMaster;
 import com.ruoyi.system.domain.dto.OrderQueryDTO;
 import com.ruoyi.system.service.IOrderMasterService;
@@ -46,7 +49,15 @@ public class OrderController {
 
 
     @PostMapping("/list")
-    public List<OrderMaster> getOrdersByPage(@RequestBody OrderQueryDTO queryDTO) {
-        return orderMasterService.selectOrdersByPage(queryDTO);
+    public  TableDataInfo getOrdersByPage(@RequestBody OrderQueryDTO queryDTO) {
+        List<OrderMaster> list =orderMasterService.selectOrdersByPage(queryDTO);
+        long total=orderMasterService.countTotalOrder(queryDTO);
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setMsg("查询成功");
+        rspData.setRows(list);
+        rspData.setTotal(total);
+        return rspData;
+
     }
 }

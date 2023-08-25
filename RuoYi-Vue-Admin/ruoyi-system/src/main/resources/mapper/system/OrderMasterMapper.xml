@@ -51,4 +51,9 @@
         LIMIT #{startIndex}, #{pageSize}
     </select>
 
+    <select id="countTotalOrder" resultType="long">
+        SELECT COUNT(1) FROM order_master AS om;
+    </select>
+
+
 </mapper>

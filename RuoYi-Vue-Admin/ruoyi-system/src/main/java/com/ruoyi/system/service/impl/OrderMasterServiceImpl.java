@@ -35,9 +35,24 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
         return orderMasterMapper.deleteOrder(orderId);
     }
 
+    /**
+     * 订单分页查询
+     * @param queryDTO
+     * @return
+     */
     @Override
     public List<OrderMaster> selectOrdersByPage(OrderQueryDTO queryDTO) {
         return orderMasterMapper.selectOrdersByPage(queryDTO);
+    }
+
+    /**
+     * 查询总数
+     * @param queryDTO
+     * @return
+     */
+    @Override
+    public   long  countTotalOrder  (OrderQueryDTO queryDTO){
+        return orderMasterMapper.countTotalOrder(queryDTO);
     }
 
 }

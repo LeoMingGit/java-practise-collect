@@ -22,4 +22,5 @@ public interface OrderMasterMapper {
 
     List<OrderMaster> selectOrdersByPage(OrderQueryDTO queryDTO);
 
+    long  countTotalOrder  (OrderQueryDTO queryDTO);
 }
