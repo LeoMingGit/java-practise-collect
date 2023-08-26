@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class OrderMaster {
-    private Integer orderId;
+    private String orderId;
     private String buyerName;
     private String buyerPhone;
     private BigDecimal orderAmount;
@@ -15,11 +15,11 @@ public class OrderMaster {
     private Date updateTime;
     private String updateUser;
 
-    public Integer getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 

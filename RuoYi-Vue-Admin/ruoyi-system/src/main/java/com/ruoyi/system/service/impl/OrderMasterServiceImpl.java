@@ -9,7 +9,11 @@ import com.ruoyi.system.domain.dto.OrderMasterDto;
 import com.ruoyi.system.domain.dto.OrderQueryDTO;
 import com.ruoyi.system.mapper.OrderMasterMapper;
 import com.ruoyi.system.service.IOrderMasterService;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
@@ -24,6 +28,11 @@ import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.fastjson2.JSON;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +43,12 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
 
     @Autowired
     private OrderMasterMapper orderMasterMapper;
+
+
+    @Autowired
+    private DataSourceTransactionManager transactionManager;
+
+
 
     @Override
     public OrderMaster selectOrderById(Integer orderId) {
@@ -83,19 +98,38 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
     @Override
     public AjaxResult handleOrderExcel(String excelpath){
         System.out.println(excelpath);
-
-
         // 这里 需要指定读用哪个class去读，然后读取第一个sheet 同步读取会自动finish
         List<OrderMasterDto> list = EasyExcel.read(excelpath).head(OrderMasterDto.class).sheet().doReadSync();
         for (OrderMasterDto data : list) {
-            System.out.println(("读取到数据:{}"+JSON.toJSONString(data)));
+            System.out.println((JSON.toJSONString(data)));
+        }
+        DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
+        definition.setPropagationBehaviorName("PROPAGATION_REQUIRED");
+        TransactionStatus transactionStatus = transactionManager.getTransaction(definition);
+        try {
+          List<OrderMaster> saveDataList=new ArrayList<>();
+
+            for (int i = 0; i < list.size(); i++) {
+                OrderMasterDto itemSource=list.get(i);
+                OrderMaster  itemData=new OrderMaster();
+                BeanUtils.copyProperties(itemSource, itemData);
+                itemData.setOrderId(UUID.randomUUID().toString());
+                saveDataList.add(itemData);
+                orderMasterMapper.insertOrder(itemData);
+
+                if(i==2){
+                    throw new Exception("测试事务回滚");
+                }
+            }
+
+            transactionManager.commit(transactionStatus);
+        }catch (Exception e){
+            e.printStackTrace();
+            transactionManager.rollback(transactionStatus);
+            return new AjaxResult(500,"程序内部错误");
         }
 
-
-        AjaxResult result= new AjaxResult();
-
-
-        return result;
+        return new AjaxResult(200,"操作成功");
 
 
     }

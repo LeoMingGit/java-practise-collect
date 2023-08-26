@@ -13,7 +13,7 @@ import java.util.Objects;
 public class OrderMasterDto {
 
     @ExcelProperty("order_id")
-    private Integer orderId;
+    private String orderId;
 
     @ExcelProperty("buyer_name")
     private String buyerName;
@@ -40,11 +40,11 @@ public class OrderMasterDto {
     private String updateUser;
 
 
-    public Integer getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 

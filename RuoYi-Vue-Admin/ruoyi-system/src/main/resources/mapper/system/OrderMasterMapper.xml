@@ -21,8 +21,8 @@
     </select>
 
     <insert id="insertOrder" parameterType="com.ruoyi.system.domain.OrderMaster">
-        INSERT INTO order_master (buyer_name, buyer_phone, order_amount, status, create_time, create_user, update_time, update_user)
-        VALUES (#{buyerName}, #{buyerPhone}, #{orderAmount}, #{status}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser})
+        INSERT INTO order_master (order_id,buyer_name, buyer_phone, order_amount, status, create_time, create_user, update_time, update_user)
+        VALUES (#{orderId},#{buyerName}, #{buyerPhone}, #{orderAmount}, #{status}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser})
     </insert>
 
     <update id="updateOrder" parameterType="com.ruoyi.system.domain.OrderMaster">
@@ -40,14 +40,7 @@
         <bind name="startIndex" value="(pageIndex - 1) * pageSize" />
         SELECT *
         FROM order_master
-<!--        WHERE-->
-<!--        <if test="startTime != null">-->
-<!--            create_time >= #{startTime}-->
-<!--        </if>-->
-<!--        <if test="endTime != null">-->
-<!--            AND create_time <= #{endTime}-->
-<!--        </if>-->
-        ORDER BY order_id ASC
+        ORDER BY create_time  DESC
         LIMIT #{startIndex}, #{pageSize}
     </select>
 
