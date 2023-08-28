@@ -24,11 +24,9 @@ import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.validation.Validator;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import java.io.File;
-import java.io.FileInputStream;
+
+import java.io.*;
 import javax.annotation.Resource;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -109,15 +107,15 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
             return new AjaxResult(500,"文件找不到");
         }
 
-        try (FileInputStream inputStream = new FileInputStream(file)) {
-            // Save the file to GridFS
-            String fileId = gridFsTemplate.store(inputStream, file.getName(),"").toString();
-            if(StringUtils.isBlank(fileId))   return new AjaxResult(500,"上传文件失败");
+        try (FileInputStream inputStream = new FileInputStream(file);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream)) {
+            String fileId = gridFsTemplate.store(bufferedInputStream, file.getName(), "").toString();
+            if (StringUtils.isBlank(fileId)) {
+                return new AjaxResult(500, "上传文件失败");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-        catch (IOException ex)    {
-           ex.printStackTrace();
-        }
-
 
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
         definition.setPropagationBehaviorName("PROPAGATION_REQUIRED");
@@ -134,7 +132,7 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
                 orderMasterMapper.insertOrder(itemData);
 
                 if(i==2){
-                    throw new Exception("测试事务回滚");
+                    //throw new Exception("测试事务回滚");
                 }
             }
 
