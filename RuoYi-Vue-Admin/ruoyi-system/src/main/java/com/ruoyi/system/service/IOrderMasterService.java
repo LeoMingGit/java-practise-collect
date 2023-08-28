@@ -4,6 +4,8 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.OrderMaster;
 import com.ruoyi.system.domain.dto.OrderQueryDTO;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public interface IOrderMasterService {
@@ -28,7 +30,7 @@ public interface IOrderMasterService {
      * @param excel
      * @return
      */
-    AjaxResult handleOrderExcel(String excel);
+    AjaxResult handleOrderExcel(String excel) throws IOException;
 
 
 

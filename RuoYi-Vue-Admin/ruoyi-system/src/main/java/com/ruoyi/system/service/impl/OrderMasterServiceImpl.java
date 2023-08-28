@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.OrderMaster;
 import com.ruoyi.system.domain.dto.OrderMasterDto;
 import com.ruoyi.system.domain.dto.OrderQueryDTO;
@@ -13,30 +14,22 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelReader;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.annotation.format.DateTimeFormat;
-import com.alibaba.excel.annotation.format.NumberFormat;
-import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.converters.DefaultConverterLoader;
-import com.alibaba.excel.enums.CellExtraTypeEnum;
-import com.alibaba.excel.read.listener.PageReadListener;
-import com.alibaba.excel.read.listener.ReadListener;
-import com.alibaba.excel.read.metadata.ReadSheet;
-import com.alibaba.excel.util.ListUtils;
-import com.alibaba.fastjson2.JSON;
-import org.springframework.transaction.TransactionDefinition;
+import org.springframework.data.mongodb.core.CollectionOptions;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
+import org.springframework.data.mongodb.core.validation.Validator;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-
-import java.util.UUID;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
+import javax.annotation.Resource;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class OrderMasterServiceImpl implements IOrderMasterService {
@@ -48,7 +41,11 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
     @Autowired
     private DataSourceTransactionManager transactionManager;
 
+    @Resource
+    private MongoTemplate mongoTemplate;
 
+    @Autowired
+    GridFsTemplate gridFsTemplate;
 
     @Override
     public OrderMaster selectOrderById(Integer orderId) {
@@ -96,13 +93,32 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
      * @return
      */
     @Override
-    public AjaxResult handleOrderExcel(String excelpath){
+    public AjaxResult handleOrderExcel(String excelpath)  {
         System.out.println(excelpath);
         // 这里 需要指定读用哪个class去读，然后读取第一个sheet 同步读取会自动finish
         List<OrderMasterDto> list = EasyExcel.read(excelpath).head(OrderMasterDto.class).sheet().doReadSync();
         for (OrderMasterDto data : list) {
             System.out.println((JSON.toJSONString(data)));
         }
+
+        File file = new File(excelpath);
+
+
+        //把excel文件上传到mongodb中去
+        if (!file.exists()) {
+            return new AjaxResult(500,"文件找不到");
+        }
+
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            // Save the file to GridFS
+            String fileId = gridFsTemplate.store(inputStream, file.getName(),"").toString();
+            if(StringUtils.isBlank(fileId))   return new AjaxResult(500,"上传文件失败");
+        }
+        catch (IOException ex)    {
+           ex.printStackTrace();
+        }
+
+
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
         definition.setPropagationBehaviorName("PROPAGATION_REQUIRED");
         TransactionStatus transactionStatus = transactionManager.getTransaction(definition);
