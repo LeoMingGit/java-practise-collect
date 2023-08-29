@@ -98,15 +98,11 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
         for (OrderMasterDto data : list) {
             System.out.println((JSON.toJSONString(data)));
         }
-
         File file = new File(excelpath);
-
-
         //把excel文件上传到mongodb中去
         if (!file.exists()) {
             return new AjaxResult(500,"文件找不到");
         }
-
         try (FileInputStream inputStream = new FileInputStream(file);
              BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream)) {
             String fileId = gridFsTemplate.store(bufferedInputStream, file.getName(), "").toString();
@@ -117,6 +113,8 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
             ex.printStackTrace();
         }
 
+         //把excel的数据存储到数据库中去
+        //开启事物
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
         definition.setPropagationBehaviorName("PROPAGATION_REQUIRED");
         TransactionStatus transactionStatus = transactionManager.getTransaction(definition);
@@ -135,10 +133,11 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
                     //throw new Exception("测试事务回滚");
                 }
             }
-
+             //提交事物
             transactionManager.commit(transactionStatus);
         }catch (Exception e){
             e.printStackTrace();
+            //回滚事物
             transactionManager.rollback(transactionStatus);
             return new AjaxResult(500,"程序内部错误");
         }
