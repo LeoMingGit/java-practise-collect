@@ -24,13 +24,16 @@ import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.validation.Validator;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.*;
 import javax.annotation.Resource;
 import java.util.*;
 
 @Service
 public class OrderMasterServiceImpl implements IOrderMasterService {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderMasterServiceImpl.class);
 
     @Autowired
     private OrderMasterMapper orderMasterMapper;
@@ -93,6 +96,8 @@ public class OrderMasterServiceImpl implements IOrderMasterService {
     @Override
     public AjaxResult handleOrderExcel(String excelpath)  {
         System.out.println(excelpath);
+        log.error("\n=== 返回值 ===\n" +excelpath);
+
         // 这里 需要指定读用哪个class去读，然后读取第一个sheet 同步读取会自动finish
         List<OrderMasterDto> list = EasyExcel.read(excelpath).head(OrderMasterDto.class).sheet().doReadSync();
         for (OrderMasterDto data : list) {
