@@ -1,0 +1,15 @@
+*.iml
+/target
+/rabbitmq-api/target
+/springboot-rabbitmq-annotation/target
+/springboot-rabbitmq-javaconfig/target
+/springboot-rabbitmq-ack/target
+/.idea
+/.mvn
+/server_log
+/mvnw
+/mvnw.cmd
+/logs
+*.log
+/**/.idea
+
