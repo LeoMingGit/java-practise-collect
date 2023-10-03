@@ -14,16 +14,22 @@ import java.util.concurrent.TimeoutException;
 public class AutoAckFalseConsumerA {
 
     public static void main(String[] args) throws IOException, TimeoutException {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("myhost");
+        // 1.创建一个ConnectionFactory，并进行配置
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost("117.72.43.18");
+        connectionFactory.setPort(5672);
+        connectionFactory.setUsername("lix");
+        connectionFactory.setPassword("123456");
+        // 不设置的话，默认也为/
+        connectionFactory.setVirtualHost("/");
 
-        Connection connection = factory.newConnection();
+        Connection connection = connectionFactory.newConnection();
         Channel channel = connection.createChannel();
 
         channel.exchangeDeclare(AutoAckFalseProducer.EXCHANGE_NAME, BuiltinExchangeType.DIRECT);
 
         String queueName = "errorQueue";
-        channel.queueDeclare(queueName, false, false, false, null);
+        channel.queueDeclare(queueName, true, false, false, null);
 
         String bindingKey = "error";
         channel.queueBind(queueName, AutoAckFalseProducer.EXCHANGE_NAME, bindingKey);
